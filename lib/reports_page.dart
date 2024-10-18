@@ -56,9 +56,9 @@ class _ReportsPageState extends State<ReportsPage> {
       future: quizListData,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text('Error');
+          return const Text('Error');
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Text('data');
+          return const Text('data');
         } else {
           return ListView.builder(
             itemCount: snapshot.data!.length,
@@ -89,8 +89,8 @@ class _ReportsPageState extends State<ReportsPage> {
                   child: Column(
                     children: [
                       ClipRRect(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(30)),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(30)),
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -108,7 +108,7 @@ class _ReportsPageState extends State<ReportsPage> {
                             ),
                             Text(
                               categoryName,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 50,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -136,7 +136,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Padding(
@@ -149,7 +149,7 @@ class _ReportsPageState extends State<ReportsPage> {
                           ),
                         ),
                       ),
-                      Divider(),
+                      const Divider(),
                       ListTile(
                         title: Text(
                           'A: ${ansList[0]}',

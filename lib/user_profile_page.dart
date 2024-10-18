@@ -39,7 +39,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 const SizedBox(
                   height: 100,
                 ),
-                Stack(children: [
+                const Stack(children: [
                   CircleAvatar(
                     radius: 50,
                     child: Icon(
@@ -55,17 +55,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         size: 30,
                       ))
                 ]),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 100.0),
                   child: TextField(
                     controller: nameController,
-                    decoration: InputDecoration(labelText: 'Enter your name'),
+                    decoration:
+                        const InputDecoration(labelText: 'Enter your name'),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ),
                 FilledButton(
@@ -82,7 +83,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                     Text('Please enter your name to start')));
                       }
                     },
-                    child: Text(
+                    child: const Text(
                       'Finish',
                       style: TextStyle(fontSize: 20),
                     ))

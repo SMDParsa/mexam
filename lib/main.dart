@@ -133,7 +133,7 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           title: Row(
             children: [
-              CircleAvatar(radius: 25, child: Text('A')),
+              const CircleAvatar(radius: 25, child: Text('A')),
               Text(
                 'Quiz App',
                 style:
