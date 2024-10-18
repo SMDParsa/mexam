@@ -147,9 +147,10 @@ GROUP BY c.ID;''');
   Future<List<Map<String, dynamic>>> getQuizReport() {
     final db = DatabaseHelper._database!;
     return db.rawQuery(
-        '''SELECT q.id, q.text, q.ans_a, q.ans_b, q.ans_c, q.ans_d, q.correct_ans, q.u_ans, q.extra, q.is_answered, q.category_id AS Quizzes
-FROM QuizTable q
-LEFT JOIN Category c ON q.category_id = c.ID AND q.is_answered = "1";''');
+        '''SELECT QuizTable.id, QuizTable.text, QuizTable.ans_a, QuizTable.ans_b, QuizTable.ans_c, QuizTable.ans_d, QuizTable.correct_ans, QuizTable.u_ans, QuizTable.extra, QuizTable.is_answered, QuizTable.category_id, QuizTable.favorite, Category.Name, Category.Image
+FROM QuizTable
+INNER JOIN Category ON QuizTable.category_id = Category.ID
+WHERE QuizTable.is_answered = "1";''');
   }
 
   Future<List<Map<String, dynamic>>> getQuizList() {
@@ -185,6 +186,18 @@ LEFT JOIN Category c ON q.category_id = c.ID AND q.is_answered = "1";''');
     final db = DatabaseHelper._database;
 
     final data = {'is_answered': 1, 'score': score, 'u_ans': uSelected};
+
+    final result =
+        await db?.update('QuizTable', data, where: "id = ?", whereArgs: [id]);
+    return result;
+  }
+
+  static Future<int?> adFavorite(int id, int favorite) async {
+    final db = DatabaseHelper._database;
+
+    final data = {
+      'favorite': favorite,
+    };
 
     final result =
         await db?.update('QuizTable', data, where: "id = ?", whereArgs: [id]);
