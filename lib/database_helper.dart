@@ -116,6 +116,20 @@ class DatabaseHelper {
         .query('QuizTable', where: "category_id = ?", whereArgs: [categoryId]);
   }
 
+  Future<List<Map<String, dynamic>>> getUserInfo() {
+    final db = DatabaseHelper._database!;
+    return db.query('UserTable', limit: 1);
+  }
+
+  static Future<int?> saveUserInfo(String userName, String userPic) async {
+    final db = DatabaseHelper._database;
+
+    final data = {'UserName': userName, 'UserPicture': userPic};
+
+    final result = await db?.insert('UserTable', data);
+    return result;
+  }
+
   Future<List<Map<String, dynamic>>> getCategory(int id) {
     final db = DatabaseHelper._database!;
     return db.query('Category', where: "ID = ?", whereArgs: [id]);
@@ -128,6 +142,19 @@ class DatabaseHelper {
 FROM Category c
 LEFT JOIN QuizTable q ON c.ID = q.category_id
 GROUP BY c.ID;''');
+  }
+
+  Future<List<Map<String, dynamic>>> getQuizReport() {
+    final db = DatabaseHelper._database!;
+    return db.rawQuery(
+        '''SELECT q.id, q.text, q.ans_a, q.ans_b, q.ans_c, q.ans_d, q.correct_ans, q.u_ans, q.extra, q.is_answered, q.category_id AS Quizzes
+FROM QuizTable q
+LEFT JOIN Category c ON q.category_id = c.ID AND q.is_answered = "1";''');
+  }
+
+  Future<List<Map<String, dynamic>>> getQuizList() {
+    final db = DatabaseHelper._database!;
+    return db.query('QuizTable');
   }
 
   Future<int> getQuizScore(int categoryId) async {

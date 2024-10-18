@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mexam/database_helper.dart';
 import 'package:mexam/home_page.dart';
 import 'package:mexam/reports_page.dart';
 import 'package:mexam/settings_page.dart';
+import 'package:mexam/user_profile_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,22 +49,24 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Quiz App',
       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
-      home: MyHomePage(
+      home: MainPage(
         toggleDarkMode: _toggleDarkMode,
       ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.toggleDarkMode});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key, required this.toggleDarkMode});
   final Function toggleDarkMode;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainPageState extends State<MainPage> {
+  late Future<List<Map<String, dynamic>>> _userData;
+
   int selectedBNB = 0;
   double fontSize = 12;
 
@@ -108,19 +112,34 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<List<Map<String, dynamic>>> _getUserInfo() async {
+    await DatabaseHelper().database;
+
+    List<Map<String, dynamic>> userData = await DatabaseHelper().getUserInfo();
+
+    return userData;
+  }
+
   @override
   void initState() {
     super.initState();
     _loadFontSizePrefs();
+    _userData = _getUserInfo();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Quiz App',
-            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+          title: Row(
+            children: [
+              CircleAvatar(radius: 25, child: Text('A')),
+              Text(
+                'Quiz App',
+                style:
+                    TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -147,7 +166,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   tooltip: 'Settings'),
             ]),
         body: selectedBNB == 0
-            ? const HomePage()
+            ? /* _userData.isNotEmpty
+                ? const HomePage()
+                : const UserProfilePage() */
+
+            FutureBuilder(
+                future: _userData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const UserProfilePage();
+                  } else {
+                    return const HomePage();
+                  }
+                },
+              )
             : selectedBNB == 1
                 ? const ReportsPage()
                 : SettingsPage(
