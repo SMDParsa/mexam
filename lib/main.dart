@@ -134,6 +134,9 @@ class _MainPageState extends State<MainPage> {
           title: Row(
             children: [
               const CircleAvatar(radius: 25, child: Text('A')),
+              SizedBox(
+                width: 20,
+              ),
               Text(
                 'Quiz App',
                 style:

@@ -182,6 +182,13 @@ WHERE QuizTable.is_answered = "1";''');
         whereArgs: [1, categoryId]);
   }
 
+  Future<List<Map<String, dynamic>>> getCorrectAnsweredQuiz(int categoryId) {
+    final db = DatabaseHelper._database!;
+    return db.query('QuizTable',
+        where: "is_answered = ? AND category_id = ? AND score = ?",
+        whereArgs: [1, categoryId, 10]);
+  }
+
   static Future<int?> saveAnswer(int id, String uSelected, int score) async {
     final db = DatabaseHelper._database;
 

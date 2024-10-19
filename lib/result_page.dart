@@ -23,8 +23,9 @@ class _ResultPageState extends State<ResultPage> {
   int? totalScore;
   final GlobalKey _globalKey = GlobalKey(); // Key for RepaintBoundary
 
-  void _getAnsweredQuiz() async {
-    final data = await DatabaseHelper().getAnsweredQuiz(widget.quizCategory);
+  void _getCorrectAnsweredQuiz() async {
+    final data =
+        await DatabaseHelper().getCorrectAnsweredQuiz(widget.quizCategory);
     setState(() {
       _quizAnsweredList = data;
     });
@@ -64,7 +65,7 @@ class _ResultPageState extends State<ResultPage> {
   @override
   void initState() {
     super.initState();
-    _getAnsweredQuiz();
+    _getCorrectAnsweredQuiz();
     _getAllQuiz();
     _fetchTotalScore(); // Fetch the total score when the screen initializes
   }
