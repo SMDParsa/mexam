@@ -38,6 +38,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Future<void> _saveUserData(String userName, Uint8List userPic) async {
     await DatabaseHelper.updateUserInfo(userName, userPic);
+    _getUserInfo();
   }
 
   Future<void> _getUserInfo() async {
@@ -46,7 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
     userInfo = await DatabaseHelper().getUserInfo();
 
     setState(() {
-      _imageData = userInfo[1]['UserPicure'];
+      userInfo = userInfo;
     });
   }
 
@@ -80,13 +81,28 @@ class _SettingsPageState extends State<SettingsPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GestureDetector(
-                      onTap: _pickAndSaveImage,
+                      onTap: () async {
+                        // _pickAndSaveImage();
+                        final pickedFile = await _picker.pickImage(
+                            source: ImageSource.gallery);
+                        if (pickedFile != null) {
+                          final imageBytes = await pickedFile.readAsBytes();
+
+                          // await _saveUserData('userName', imageBytes);
+
+                          setState(() {
+                            _imageData = imageBytes;
+                          });
+                        }
+                      },
                       child: SizedBox(
                           width: 100,
                           height: 100,
                           child: _imageData != null
                               ? Image.memory(_imageData!)
-                              : Icon(Icons.person)),
+                              : userInfo[0]['UserPicture'] != null
+                                  ? Image.memory(userInfo[0]['UserPicture'])
+                                  : Icon(Icons.person)),
                     ),
                     TextField(
                       controller: nameController,
@@ -194,14 +210,14 @@ class _SettingsPageState extends State<SettingsPage> {
             ListTile(
               onTap: _showPickDialog,
               leading: CircleAvatar(
-                child: _imageData != null
+                child: userInfo.isNotEmpty
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child: Image.memory(_imageData!))
+                        child: Image.memory(userInfo[0]['UserPicture']))
                     : Icon(Icons.person),
               ),
               title: Text(
-                userInfo[0]['UserName'],
+                userInfo.isNotEmpty ? userInfo[0]['UserName'] : 'Loading...',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               trailing: Text(
