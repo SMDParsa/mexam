@@ -56,9 +56,35 @@ class _ReportsPageState extends State<ReportsPage> {
       future: quizListData,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return const Text('Error');
+          return Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.nearby_error,
+                size: 50,
+              ),
+              const Text(
+                'Error getting data',
+                style: TextStyle(fontSize: 30),
+              ),
+            ],
+          ));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Text('data');
+          return Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.info,
+                size: 50,
+              ),
+              const Text(
+                'No Report, please try again later',
+                style: TextStyle(fontSize: 30),
+              ),
+            ],
+          ));
         } else {
           return ListView.builder(
             itemCount: snapshot.data!.length,
