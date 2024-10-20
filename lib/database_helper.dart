@@ -121,7 +121,7 @@ class DatabaseHelper {
     return db.query('UserTable', limit: 1);
   }
 
-  static Future<int?> saveUserInfo(String userName, String userPic) async {
+  static Future<int?> saveUserInfo(String userName, Uint8List userPic) async {
     final db = DatabaseHelper._database;
 
     final data = {'UserName': userName, 'UserPicture': userPic};

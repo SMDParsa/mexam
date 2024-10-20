@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mexam/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main(List<String> args) {
+void main() {
   runApp(SplashPage());
 }
 

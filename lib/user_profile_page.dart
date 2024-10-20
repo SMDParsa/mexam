@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mexam/database_helper.dart';
 import 'package:mexam/main.dart';
 
@@ -16,10 +19,43 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
+  List<Map<String, dynamic>> userInfo = [];
   TextEditingController nameController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  Uint8List? _imageData;
 
-  Future<void> _saveUserData(String userName, String userPic) async {
+  Future<void> _pickAndSaveImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final imageBytes = await pickedFile.readAsBytes();
+
+      // await _saveUserData('userName', imageBytes);
+
+      setState(() {
+        _imageData = imageBytes;
+      });
+    }
+  }
+
+  Future<void> _saveUserData(String userName, Uint8List userPic) async {
     await DatabaseHelper.saveUserInfo(userName, userPic);
+  }
+
+  Future<void> _getUserInfo() async {
+    // await DatabaseHelper().database;
+
+    userInfo = await DatabaseHelper().getUserInfo();
+
+    setState(() {
+      _imageData = userInfo[1]['UserPicure'];
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getUserInfo();
   }
 
   @override
@@ -39,22 +75,24 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 const SizedBox(
                   height: 100,
                 ),
-                const Stack(children: [
-                  CircleAvatar(
-                    radius: 50,
-                    child: Icon(
-                      Icons.person,
-                      size: 100,
+                GestureDetector(
+                  onTap: _pickAndSaveImage,
+                  child: Stack(children: [
+                    CircleAvatar(
+                      radius: 50,
+                      child: _imageData != null
+                          ? Image.memory(_imageData!)
+                          : Icon(Icons.person),
                     ),
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Icon(
-                        Icons.photo_camera_back_outlined,
-                        size: 30,
-                      ))
-                ]),
+                    const Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Icon(
+                          Icons.photo_camera_back_outlined,
+                          size: 30,
+                        ))
+                  ]),
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -71,9 +109,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ),
                 FilledButton(
                     onPressed: () {
-                      if (nameController.text.isNotEmpty) {
-                        _saveUserData(
-                            nameController.text, 'user Picture not set');
+                      if (nameController.text.isNotEmpty &&
+                          _imageData != null) {
+                        _saveUserData(nameController.text, _imageData!);
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const MyApp()));
                       } else {
