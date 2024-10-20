@@ -78,7 +78,12 @@ class _SplashingState extends State<Splashing> {
           children: [
             CircleAvatar(
               radius: 100,
-              child: Image.asset('assets/images/splash_logo.jpg'),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.asset('assets/images/splash_logo.jpg')),
+            ),
+            SizedBox(
+              height: 50,
             ),
             Text(
               'MeXam',

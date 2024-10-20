@@ -47,13 +47,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
     userInfo = await DatabaseHelper().getUserInfo();
 
     setState(() {
-      _imageData = userInfo[1]['UserPicure'];
+      userInfo = userInfo;
     });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getUserInfo();
   }
@@ -80,9 +79,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   child: Stack(children: [
                     CircleAvatar(
                       radius: 50,
-                      child: _imageData != null
-                          ? Image.memory(_imageData!)
-                          : Icon(Icons.person),
+                      child: userInfo.isNotEmpty
+                          ? Image.memory(userInfo[0]['UserPicture'])
+                          : Icon(
+                              Icons.person,
+                              size: 50,
+                            ),
                     ),
                     const Positioned(
                         bottom: 0,
