@@ -79,11 +79,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   child: Stack(children: [
                     CircleAvatar(
                       radius: 50,
-                      child: userInfo.isNotEmpty
-                          ? Image.memory(userInfo[0]['UserPicture'])
+                      child: _imageData != null
+                          ? Image.memory(userInfo.isNotEmpty
+                              ? userInfo[0]['UserPicture']
+                              : _imageData)
                           : Icon(
                               Icons.person,
-                              size: 50,
+                              size: 100,
                             ),
                     ),
                     const Positioned(
@@ -117,10 +119,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => const MyApp()));
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                    Text('Please enter your name to start')));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                'Please enter a name and a picture to start')));
                       }
                     },
                     child: const Text(

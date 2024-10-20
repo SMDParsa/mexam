@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:mexam/database_helper.dart';
 import 'package:mexam/home_page.dart';
@@ -66,9 +68,11 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late Future<List<Map<String, dynamic>>> _userData;
+  List<Map<String, dynamic>> userPic = [];
 
   int selectedBNB = 0;
   double fontSize = 12;
+  Uint8List? userImage;
 
   Future<void> _saveFontSize(double value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -120,29 +124,27 @@ class _MainPageState extends State<MainPage> {
     return userData;
   }
 
+  Future<void> _getUserPic() async {
+    await DatabaseHelper().database;
+
+    userPic = await DatabaseHelper().getUserInfo();
+  }
+
   @override
   void initState() {
     super.initState();
     _loadFontSizePrefs();
     _userData = _getUserInfo();
+    _getUserPic();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              const CircleAvatar(radius: 25, child: Text('A')),
-              SizedBox(
-                width: 20,
-              ),
-              Text(
-                'Quiz App',
-                style:
-                    TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
-              ),
-            ],
+          title: Text(
+            'Quiz App',
+            style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
