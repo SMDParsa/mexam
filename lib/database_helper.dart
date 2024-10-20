@@ -124,9 +124,19 @@ class DatabaseHelper {
   static Future<int?> saveUserInfo(String userName, Uint8List userPic) async {
     final db = DatabaseHelper._database;
 
-    final data = {'UserName': userName, 'UserPicture': userPic};
+    final data = {'ID': 1, 'UserName': userName, 'UserPicture': userPic};
 
     final result = await db?.insert('UserTable', data);
+    return result;
+  }
+
+  static Future<int?> updateUserInfo(String userName, Uint8List userPic) async {
+    final db = DatabaseHelper._database;
+
+    final data = {'UserName': userName, 'UserPicture': userPic};
+
+    final result =
+        await db?.update('UserTable', data, where: "ID = ?", whereArgs: [1]);
     return result;
   }
 
