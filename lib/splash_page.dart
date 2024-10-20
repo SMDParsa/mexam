@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 
 void main(List<String> args) {
-  runApp(SplashApp());
+  runApp(SplashPage());
 }
 
-class SplashApp extends StatelessWidget {
-  const SplashApp({super.key});
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
 
   @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            children: [Icon(Icons.thirty_fps_select), Text('MeXam')],
-          ),
-        ),
-      ),
-    );
+    return const Placeholder();
   }
 }
