@@ -83,7 +83,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           ? Image.memory(userInfo.isNotEmpty
                               ? userInfo[0]['UserPicture']
                               : _imageData)
-                          : Icon(
+                          : const Icon(
                               Icons.person,
                               size: 100,
                             ),

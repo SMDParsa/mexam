@@ -56,7 +56,7 @@ class _ReportsPageState extends State<ReportsPage> {
       future: quizListData,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(
+          return const Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -64,14 +64,14 @@ class _ReportsPageState extends State<ReportsPage> {
                 Icons.nearby_error,
                 size: 50,
               ),
-              const Text(
+              Text(
                 'Error getting data',
                 style: TextStyle(fontSize: 30),
               ),
             ],
           ));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(
+          return const Center(
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -79,7 +79,7 @@ class _ReportsPageState extends State<ReportsPage> {
                 Icons.info,
                 size: 50,
               ),
-              const Text(
+              Text(
                 'No Report, please try again later',
                 style: TextStyle(fontSize: 30),
               ),

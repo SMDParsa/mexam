@@ -60,7 +60,7 @@ class _SplashingState extends State<Splashing> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -82,14 +82,14 @@ class _SplashingState extends State<Splashing> {
                   borderRadius: BorderRadius.circular(100),
                   child: Image.asset('assets/images/splash_logo.jpg')),
             ),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
-            Text(
+            const Text(
               'MeXam',
               style: TextStyle(fontSize: 30),
             ),
-            Text(
+            const Text(
               'V 1.0 (build 1)',
               style: TextStyle(fontSize: 20),
             )

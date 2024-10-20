@@ -23,19 +23,6 @@ class _SettingsPageState extends State<SettingsPage> {
   final ImagePicker _picker = ImagePicker();
   Uint8List? _imageData;
 
-  Future<void> _pickAndSaveImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final imageBytes = await pickedFile.readAsBytes();
-
-      // await _saveUserData('userName', imageBytes);
-
-      setState(() {
-        _imageData = imageBytes;
-      });
-    }
-  }
-
   Future<void> _saveUserData(String userName, Uint8List userPic) async {
     await DatabaseHelper.updateUserInfo(userName, userPic);
     _getUserInfo();
@@ -102,12 +89,12 @@ class _SettingsPageState extends State<SettingsPage> {
                               ? Image.memory(_imageData!)
                               : userInfo[0]['UserPicture'] != null
                                   ? Image.memory(userInfo[0]['UserPicture'])
-                                  : Icon(Icons.person)),
+                                  : const Icon(Icons.person)),
                     ),
                     TextField(
                       controller: nameController,
-                      decoration: InputDecoration(
-                        label: const Text('Enter your name'),
+                      decoration: const InputDecoration(
+                        label: Text('Enter your name'),
                       ),
                     ),
                     const SizedBox(
@@ -123,7 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 Navigator.of(context).pop();
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                         content:
                                             Text('Please enter your name')));
                               }
@@ -206,7 +193,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ],
               ),
             ),
-            Divider(),
+            const Divider(),
             ListTile(
               onTap: _showPickDialog,
               leading: CircleAvatar(
@@ -214,13 +201,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: Image.memory(userInfo[0]['UserPicture']))
-                    : Icon(Icons.person),
+                    : const Icon(Icons.person),
               ),
               title: Text(
                 userInfo.isNotEmpty ? userInfo[0]['UserName'] : 'Loading...',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
-              trailing: Text(
+              trailing: const Text(
                 'Tap to change',
                 style: TextStyle(fontSize: 20),
               ),
